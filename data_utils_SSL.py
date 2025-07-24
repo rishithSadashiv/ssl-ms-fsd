@@ -231,12 +231,10 @@ class Dataset_ASVspoof2019_train(Dataset):
             X,fs = librosa.load(self.base_dir+'flac/'+utt_id+'.flac', sr=16000) 
             Y=process_Rawboost_feature(X,fs,self.args,self.algo)
             X_pad= pad(Y,self.cut)
-            sff_emb = get_sff_2demb(X_pad, fs)
             x_inp= Tensor(X_pad)
-            sff_emb = Tensor(sff_emb)
             target = self.labels[utt_id]
             
-            return x_inp, sff_emb, target
+            return x_inp, target
 
 def getMsValues(audio_data,fs):
     x=audio_data
@@ -326,41 +324,6 @@ class Dataset_ASVspoof2021_eval_ms(Dataset):
 
 
 
-from scipy.signal import lfilter
-from scipy.fftpack import dct
-def get_sff_2demb(audio, fs):
-    fqstep = 40
-    fq = np.arange(0, fs/2 + fqstep, fqstep)
-    rval = 0.998
-    
-    s = audio
-    nf = len(fq)
-    len_s_buff = np.arange(1, len(s) + 1)
-    nwi = 2 * np.pi * fq / fs
-    exp1 = np.outer(len_s_buff, nwi).T
-    exp2 = np.exp(-1j * exp1)
-
-    sh_sig=exp2*np.tile(s,(nf,1))
-
-    real_sh_sig = np.real(sh_sig)
-    imag_sh_sig = np.imag(sh_sig)
-
-    a = np.array([1, -rval], dtype=np.float64)  # Change the sign of rval here
-    b = np.array([1], dtype=np.float64)
-
-    spec_amp_r=lfilter(b, a, real_sh_sig, axis=1)
-    spec_amp_i=lfilter(b, a, imag_sh_sig, axis=1)
-    envelope = np.sqrt(spec_amp_r ** 2 + spec_amp_i ** 2)
-    scomp = spec_amp_r + spec_amp_i * 1j
-    envelope[np.isnan(envelope)] = 0
-    envelope += 0.001
-    
-    # Apply DCT
-    envelope = np.log10(envelope)
-    emb = dct(envelope)
-    emb = emb[:,0:50]
-    
-    return emb
 
 
 #--------------RawBoost data augmentation algorithms---------------------------##

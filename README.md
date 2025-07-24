@@ -6,7 +6,7 @@ Fusion of Modulation Spectrogram and SSL with Multi-head Attention for Fake Spee
 
 This repository contains our implementation of the our paper currently under review for publication at APSIPA ASC 2025. The work focuses on enhancing domain generalizability in fake speech detection, with experiments conducted on the ASVspoof 2019 LA, ASVspoof 2021 LA, and MLAAD datasets. Additionally, the study explores language robustness in multilingual settings.
 
-This repository is built on the baseline system proposed in [SSL-AAISIST](https://github.com/TakHemlata/SSL_Anti-spoofing).
+This repository is built on the baseline system proposed in [SSL-AASIST](https://github.com/TakHemlata/SSL_Anti-spoofing).
 
 ## Installation
 First, clone the repository locally, create and activate a conda environment, and install the requirements :
@@ -75,14 +75,23 @@ python main_SSL_LA5_trainCombined.py --lr=0.000001 --batch_size=14 --loss=WCE --
 
 
 ### Testing trained models
+- Testing Baseline models
+  - To evaluate baseline model on ASVspoof 2019 LA dataset, use ```test_asvspoof2019_LA.ipynb``` notebook.
+  - To evaluate baseline model on MLAAD dataset, use ```test_mlaad_LA.ipynb``` notebook.
+  - To evaluate baseline model on ASVspoof 2021 LA dataset, use the commands below:
+    ```
+    python main_SSL_LA.py --track=LA --is_eval --eval --model_path='[path to model]' --eval_output='eval_baseline_model_scores_LA2021.txt' --database_path='[path to LA 2021 dataset]'
+    python evaluate_2021_LA.py eval_baseline_model_scores_LA2021.txt ./LA-keys-stage-1/keys/ eval
+    ```
 
-- To evaluate proposed model on ASVspoof 2019 LA dataset, use ```test_asvspoof2019.ipynb``` notebook.
-- To evaluate proposed model on MLAAD dataset, use ```test_mlaad.ipynb``` notebook.
-- To evaluate proposed model on ASVspoof 2021 LA dataset, use the commands below:
-```
-python main_SSL_LA5.py --track=LA --is_eval --eval --model_path='[path to model]' --eval_output='eval_scores_LA2021.txt' --database_path='[path to LA 2021 dataset]'
-python evaluate_2021_LA.py eval_scores_LA2021.txt ./LA-keys-stage-1/keys/ eval
-```
+- Testing Proposed models
+  - To evaluate proposed model on ASVspoof 2019 LA dataset, use ```test_asvspoof2019_LA5.ipynb``` notebook.
+  - To evaluate proposed model on MLAAD dataset, use ```test_mlaad_LA5.ipynb``` notebook.
+  - To evaluate proposed model on ASVspoof 2021 LA dataset, use the commands below:
+    ```
+    python main_SSL_LA5.py --track=LA --is_eval --eval --model_path='[path to model]' --eval_output='eval_proposed_model_scores_LA2021.txt' --database_path='[path to LA 2021 dataset]'
+    python evaluate_2021_LA.py eval_proposed_model_scores_LA2021.txt ./LA-keys-stage-1/keys/ eval
+    ```
 
 The trained models are provided [here](https://drive.google.com/drive/folders/18dWR2b4ektPid4C8HxFMnECm_loSWF_7?usp=sharing)
 
@@ -91,14 +100,4 @@ The trained models are provided [here](https://drive.google.com/drive/folders/18
 For queries, please contact:
 - Rishith Sadashiv T N: ee24dp010[at]iitdh[dot]ac[dot]in
 <!-- ## Citation -->
-<!-- If you use this code in your research please use the following citation: -->
-<!-- ```bibtex
-
-@inproceedings{tak2022automatic,
-  title={Automatic speaker verification spoofing and deepfake detection using wav2vec 2.0 and data augmentation},
-  author={Tak, Hemlata and Todisco, Massimiliano and Wang, Xin and Jung, Jee-weon and Yamagishi, Junichi and Evans, Nicholas},
-  booktitle={The Speaker and Language Recognition Workshop},
-  year={2022}
-}
-``` -->
 
